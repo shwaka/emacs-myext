@@ -4,12 +4,12 @@
 ;;;     fuga
 ;;;   \item piyo
 ;;; \end{itemize}
-(defun LaTeX-indent-item--inner (regexp-environ item-cmd)
-  "intersection of LaTeX-indent-item and LaTeX-indent-bibitem"
+(defun myext-auctex-indent-env--indent-item--inner (regexp-environ item-cmd)
+  "intersection of myext-auctex-indent-env--indent-item and myext-auctex-indent-env--indent-bibitem"
   (save-match-data
     (let* ((offset LaTeX-indent-level)
-           (contin (or (and (boundp 'LaTeX-indent-level-item-continuation)
-                            LaTeX-indent-level-item-continuation)
+           (contin (or (and (boundp 'myext-auctex-indent-env--indent-level-item-continuation)
+                            myext-auctex-indent-env--indent-level-item-continuation)
                        (* 2 LaTeX-indent-level)))
            (re-beg "\\\\begin{")
            (re-end "\\\\end{")
@@ -35,7 +35,7 @@
              (+ offset indent))
             (t
              (+ contin indent))))))
-(defun LaTeX-indent-item ()
+(defun myext-auctex-indent-env--indent-item ()
   "Provide proper indentation for LaTeX \"itemize\",\"enumerate\", and
 \"description\" environments.
 
@@ -43,40 +43,40 @@
   the the beginning of the environment.
 
   Continuation lines are indented either twice
-  `LaTeX-indent-level', or `LaTeX-indent-level-item-continuation'
+  `LaTeX-indent-level', or `myext-auctex-indent-env--indent-level-item-continuation'
   if the latter is bound."
-  (LaTeX-indent-item--inner "\\(itemize\\|\\enumerate\\|description\\)"
-                            "\\\\item\\>"))
-(defun LaTeX-indent-bibitem ()
+  (myext-auctex-indent-env--indent-item--inner "\\(itemize\\|\\enumerate\\|description\\)"
+                                               "\\\\item\\>"))
+(defun myext-auctex-indent-env--indent-bibitem ()
   "Provide proper indentation for LaTeX \"thebibliography\" environment.
 
   \"\\bibitem\" is indented `LaTeX-indent-level' spaces relative to
   the the beginning of the environment.
 
   Continuation lines are indented either twice
-  `LaTeX-indent-level', or `LaTeX-indent-level-item-continuation'
+  `LaTeX-indent-level', or `myext-auctex-indent-env--indent-level-item-continuation'
   if the latter is bound."
-  (LaTeX-indent-item--inner "\\(thebibliography\\)"
-                            "\\\\bibitem"))
+  (myext-auctex-indent-env--indent-item--inner "\\(thebibliography\\)"
+                                               "\\\\bibitem"))
 
-(defcustom LaTeX-indent-level-item-continuation 4
+(defcustom myext-auctex-indent-env--indent-level-item-continuation 4
   "*Indentation of continuation lines for items in itemize-like
 environments."
   :group 'LaTeX-indentation
   :type 'integer)
 
 ;;; indent in tikzpicture
-(defvar my-LaTeX-tikz-commands
+(defvar myext-auctex-indent-env--tikz-commands
   '("path" "draw" "coordinate" "clip" "node")
   "commands which begin tikz commands (e.g. \\path, \\draw)")
-(defun my-LaTeX-goto-previous-nontriv-line ()
+(defun myext-auctex-indent-env--goto-previous-nontriv-line ()
   "go to (the beginning of) the previous nontrivial line"
   (forward-line -1)
   (back-to-indentation)
   (while (looking-at (rx (or line-end "%")))
     (forward-line -1)
     (back-to-indentation)))
-(defun my-LaTeX-indent-tikzpicture ()
+(defun myext-auctex-indent-env--indent-tikzpicture ()
   "indent in tikzpicture"
   (save-excursion
     (let ((indent-increase 0)
@@ -85,13 +85,13 @@ environments."
       (when (looking-at (rx "\\end"))
         (setq indent-increase (- indent-increase
                                  LaTeX-indent-level)))
-      (my-LaTeX-goto-previous-nontriv-line)
+      (myext-auctex-indent-env--goto-previous-nontriv-line)
       (setq prev-indent (current-column))
       ;; read previous line
       (when (looking-at (rx "\\begin"))
         (setq indent-increase (+ indent-increase
                                  LaTeX-indent-level)))
-      (when (looking-at (eval `(rx "\\" (or ,@my-LaTeX-tikz-commands))))
+      (when (looking-at (eval `(rx "\\" (or ,@myext-auctex-indent-env--tikz-commands))))
         (setq indent-increase (+ indent-increase
                                  LaTeX-indent-level)))
       (when (looking-at (rx (0+ (not (any "%\n"))) ";"))
@@ -101,12 +101,12 @@ environments."
          indent-increase))))
 
 (setq LaTeX-indent-environment-list
-      (nconc '(("itemize" LaTeX-indent-item)
-               ("enumerate" LaTeX-indent-item)
-               ("description" LaTeX-indent-item)
-               ("thebibliography" LaTeX-indent-bibitem)
-               ("tikzpicture" my-LaTeX-indent-tikzpicture)
-               ("scope" my-LaTeX-indent-tikzpicture))
+      (nconc '(("itemize" myext-auctex-indent-env--indent-item)
+               ("enumerate" myext-auctex-indent-env--indent-item)
+               ("description" myext-auctex-indent-env--indent-item)
+               ("thebibliography" myext-auctex-indent-env--indent-bibitem)
+               ("tikzpicture" myext-auctex-indent-env--indent-tikzpicture)
+               ("scope" myext-auctex-indent-env--indent-tikzpicture))
              LaTeX-indent-environment-list))
 
 (provide 'myext-auctex-indent-env)
