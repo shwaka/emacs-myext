@@ -36,7 +36,7 @@
             (unless (looking-back (rx "\\newif\\"))
               (setq count (+ count LaTeX-indent-level))))
            ((looking-at myext-auctex-base--else-regexp))
-           ((looking-at myext-auctex-base--end-regexp)
+           ((looking-at LaTeX-end-regexp)
             (setq count (- count LaTeX-indent-level)))
            ((looking-at (regexp-quote TeX-esc))
             (forward-char 1))))
