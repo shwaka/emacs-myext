@@ -3,20 +3,20 @@
 ;;; リンク先からの変更点
 ;;; - 関数定義を外に出した
 ;;; - setup を LaTeX-mode-hook の中ではなく，tex-mode が load された後すぐに実行するようにした
-;;; - font-latex-keywords-2 に font-latex-match-theorem-envII を追加する際の色々なフラグを変更
+;;; - font-latex-keywords-2 に myext-auctex-thmface--match-theorem-envII を追加する際の色々なフラグを変更
 
-(defcustom font-latex-theorem-environments
+(defcustom myext-auctex-thmface--theorem-environments
   '("theorem" "lemma" "proposition" "corollary" "definition")
   "List of theorem-like environment names for font locking."
   :type '(repeat string)
   :group 'font-latex)
 
-(defface my-latex-theorem-face
+(defface myext-auctex-thmface-theorem-face
   `((t :background ,mytheme-environment-background
        ))
   "face for theorem")
 
-(defun my-latex-generate-regexp (command environments)
+(defun myext-auctex-thmface--generate-regexp (command environments)
   (let ((environments (cond
                        ((stringp environments)
                         (list environments))
@@ -28,24 +28,24 @@
                       (? "*"))
                "}"))))
 
-(defun font-latex-match-theorem-envII (limit)
+(defun myext-auctex-thmface--match-theorem-envII (limit)
   "Match theorem patterns up to LIMIT.
 Used for patterns like:
 \\begin{equation}
  fontified stuff
 \\end{equation}
 The \\begin{equation} and \\end{equation} are not fontified here."
-  (when (re-search-forward (my-latex-generate-regexp "begin" font-latex-theorem-environments)
+  (when (re-search-forward (myext-auctex-thmface--generate-regexp "begin" myext-auctex-thmface--theorem-environments)
                            ;; (eval `(rx "\\begin" (0+ (any " \t")) "{"
                            ;;            (group (or ,@font-latex-theorem-environments)
                            ;;                   (? "*"))
                            ;;            "}"))
                            ;; (concat "\\\\begin[ \t]*{"
-                           ;;         (regexp-opt font-latex-theorem-environments t)
+                           ;;         (regexp-opt myext-auctex-thmface--theorem-environments t)
                            ;;         "\\*?}")
                            limit t)
     (let ((beg (match-end 0)) end)
-      (if (re-search-forward (my-latex-generate-regexp
+      (if (re-search-forward (myext-auctex-thmface--generate-regexp
                               "end" (buffer-substring-no-properties (match-beginning 1)
                                                                     (match-end 1)))
                              ;; (rx "\\end" (0+ (any " \t")) "{"
@@ -68,7 +68,7 @@ The \\begin{equation} and \\end{equation} are not fontified here."
       (store-match-data (list beg end))
       t)))
 
-(defun font-latex-extend-region-backwards-theorem-envII (beg end)
+(defun myext-auctex-thmface--extend-region-backwards-theorem-envII (beg end)
   "Return position to extend region backwards for theorem environments.
 Return nil if region does not have to be extended for a multiline
 environment to fit in.  The region between the positions BEG and
@@ -77,16 +77,16 @@ END marks boundaries for searching for environment ends."
     (goto-char end)
     (catch 'extend
       (while (re-search-backward
-              (my-latex-generate-regexp "end" font-latex-theorem-environments)
+              (myext-auctex-thmface--generate-regexp "end" myext-auctex-thmface--theorem-environments)
               ;; (eval `(rx "\\end" (0+ (any " \t")) "{"
               ;;            (group (or ,@font-latex-theorem-environments)
               ;;                   (? "*"))
               ;;            "}"))
               ;; (concat "\\\\end[ \t]*{"
-              ;;         (regexp-opt font-latex-theorem-environments t)
+              ;;         (regexp-opt myext-auctex-thmface--theorem-environments t)
               ;;         "\\*?}")
               beg t)
-        (when (and (re-search-backward (my-latex-generate-regexp
+        (when (and (re-search-backward (myext-auctex-thmface--generate-regexp
                                         "begin"
                                         (buffer-substring-no-properties (match-beginning 1)
                                                                         (match-end 1)))
@@ -104,15 +104,15 @@ END marks boundaries for searching for environment ends."
           (throw 'extend (point))))
       nil)))
 
-(defun my-latex-theorem-env-setup ()
+(defun myext-auctex-thmface-setup ()
   "これを実行すると反映される"
   (require 'font-latex)
   (add-to-list 'font-latex-keywords-2
-               '(font-latex-match-theorem-envII (0 'my-latex-theorem-face prepend t))
+               '(myext-auctex-thmface--match-theorem-envII (0 'myext-auctex-thmface-theorem-face prepend t))
                t)
   (add-to-list 'font-latex-extend-region-functions
-               'font-latex-extend-region-backwards-theorem-envII))
+               'myext-auctex-thmface--extend-region-backwards-theorem-envII))
 
-(my-latex-theorem-env-setup)
+(myext-auctex-thmface-setup)
 
 (provide 'myext-auctex-thmface)
