@@ -39,7 +39,7 @@ Return nil ifs no errors were found."
   (if process (TeX-format-mode-line process))
   (if (re-search-forward "^\\(!\\|.*:[0-9]+:\\) " nil t)
       (progn
-        (my-TeX-error-highlight)
+        (myext-auctex-error--highlight)
 	(message "%s errors in `%s'. Use %s to display." name (buffer-name)
 		 (substitute-command-keys
 		  "\\<TeX-mode-map>\\[TeX-next-error]"))
@@ -58,13 +58,13 @@ Return nil ifs no errors were found."
         (setq TeX-command-next TeX-command-Show)))
     nil))
 (advice-add 'TeX-TeX-sentinel-check :override 'override:TeX-TeX-sentinel-check)
-(defvar my-TeX-error-remap-list nil)
-(defun my-TeX-error-add-remap (face key value)
+(defvar myext-auctex-error--remap-list nil)
+(defun myext-auctex-error--add-remap (face key value)
   (push (cons
          (current-buffer)
          (face-remap-add-relative face key value))
-        my-TeX-error-remap-list))
-(defun my-TeX-error-highlight ()
+        myext-auctex-error--remap-list))
+(defun myext-auctex-error--highlight ()
   "エラー発生を目立たせる"
   (let ((orig-bg (face-background 'mode-line)))
     ;; (set-face-background 'mode-line "red")
@@ -73,19 +73,19 @@ Return nil ifs no errors were found."
     ;;                (set-face-background 'mode-line bg))
     ;;              orig-bg)
     (with-current-buffer TeX-command-buffer
-      (my-TeX-error-add-remap 'mode-line :background "red")
-      (my-TeX-error-add-remap 'mode-line-inactive :background "red")
+      (myext-auctex-error--add-remap 'mode-line :background "red")
+      (myext-auctex-error--add-remap 'mode-line-inactive :background "red")
       (run-at-time "3 sec" nil
                    (lambda ()
-                     (add-hook 'post-command-hook #'my-TeX-error-remove-remaps))))))
-(defun my-TeX-error-remove-remaps ()
-  (dolist (buf-cookie my-TeX-error-remap-list)
+                     (add-hook 'post-command-hook #'myext-auctex-error--remove-remaps))))))
+(defun myext-auctex-error--remove-remaps ()
+  (dolist (buf-cookie myext-auctex-error--remap-list)
     (let ((buf (car buf-cookie))
           (cookie (cdr buf-cookie)))
       (with-current-buffer buf
         (face-remap-remove-relative cookie))))
-  (setq my-TeX-error-remap-list nil)
-  (remove-hook 'post-command-hook #'my-TeX-error-remove-remaps))
+  (setq myext-auctex-error--remap-list nil)
+  (remove-hook 'post-command-hook #'myext-auctex-error--remove-remaps))
 
 
 (provide 'myext-auctex-error)
