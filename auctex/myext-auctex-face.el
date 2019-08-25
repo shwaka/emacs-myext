@@ -129,28 +129,29 @@
 
 
 
-(font-lock-add-keywords 'latex-mode
-                        `(("\\\\begin{document}.*\n" . myext-auctex-face-begin-document-line-face)
-                          ("\\\\begin{frame}.*\n" . myext-auctex-face-begin-frame-line-face)
-                          ("\\\\end{frame}" . myext-auctex-face-end-frame-line-face)
-                          ("\\\\part\\*?{.*}.*\n" . (0 myext-auctex-face-part-line-face t))
-                          ("\\\\section\\*?{.*}.*\n" . (0 myext-auctex-face-section-line-face t))
-                          ("\\\\subsection\\*?{.*}.*" . (0 myext-auctex-face-subsection-line-face t))
-                          ;; \section{hoge $a=b$} のような場合にも face をつけるために，OVERRIDE を t にした
-                          ;; $...$ は "syntax highlighting" なので優先度が高いらしい？
-                          ;;   https://emacs.stackexchange.com/questions/19182/how-to-highlight-specific-keywords-inside-strings-quotes/19191
-                          ;; 設定方法の詳細などは font-lock-keywords の document を参照
-                          ("\\(^\\|[^\\]\\)\\(\\\\&\\)" 2 'font-latex-warning-face)
-                          ;; ↑font-latex.el からパクってきた (元は \\\\& じゃなくて &+ だった)
-                          (,(concat "\\\\" (eval myext-auctex-base--if-regexp)) . myext-auctex-face-if-face)
-                          (,(rx "\\" (or "else" "fi") word-boundary) . myext-auctex-face-if-face)
-                          (,(rx (or "\\makeatletter" "\\makeatother") word-boundary) . font-lock-semi-keyword-face)
-                          (,myext-auctex-face-greek-regexp . myext-auctex-face-greek-face)
-                          (,myext-auctex-face-tikz-keyword-regexp . myext-auctex-face-tikz-keyword-face)
-                          (,myext-auctex-face-tikz-numeric-point-regexp (1 myext-auctex-face-tikz-point-face)
-                                                                        (2 myext-auctex-face-tikz-point-name-face))
-                          (,myext-auctex-face-tikz-alpha-point-regexp (1 myext-auctex-face-tikz-point-face)
-                                                                      (2 myext-auctex-face-tikz-point-name-face))
-                          (,myext-auctex-face-tikzcd-keyword-regexp . myext-auctex-face-tikzcd-keyword-face)))
+(font-lock-add-keywords
+ 'latex-mode
+ `(("\\\\begin{document}.*\n" . myext-auctex-face-begin-document-line-face)
+   ("\\\\begin{frame}.*\n" . myext-auctex-face-begin-frame-line-face)
+   ("\\\\end{frame}" . myext-auctex-face-end-frame-line-face)
+   ("\\\\part\\*?{.*}.*\n" . (0 myext-auctex-face-part-line-face t))
+   ("\\\\section\\*?{.*}.*\n" . (0 myext-auctex-face-section-line-face t))
+   ("\\\\subsection\\*?{.*}.*" . (0 myext-auctex-face-subsection-line-face t))
+   ;; \section{hoge $a=b$} のような場合にも face をつけるために，OVERRIDE を t にした
+   ;; $...$ は "syntax highlighting" なので優先度が高いらしい？
+   ;;   https://emacs.stackexchange.com/questions/19182/how-to-highlight-specific-keywords-inside-strings-quotes/19191
+   ;; 設定方法の詳細などは font-lock-keywords の document を参照
+   ("\\(^\\|[^\\]\\)\\(\\\\&\\)" 2 'font-latex-warning-face)
+   ;; ↑font-latex.el からパクってきた (元は \\\\& じゃなくて &+ だった)
+   (,(concat "\\\\" (eval myext-auctex-base--if-regexp)) . myext-auctex-face-if-face)
+   (,(rx "\\" (or "else" "fi") word-boundary) . myext-auctex-face-if-face)
+   (,(rx (or "\\makeatletter" "\\makeatother") word-boundary) . font-lock-semi-keyword-face)
+   (,myext-auctex-face-greek-regexp . myext-auctex-face-greek-face)
+   (,myext-auctex-face-tikz-keyword-regexp . myext-auctex-face-tikz-keyword-face)
+   (,myext-auctex-face-tikz-numeric-point-regexp (1 myext-auctex-face-tikz-point-face)
+                                                 (2 myext-auctex-face-tikz-point-name-face))
+   (,myext-auctex-face-tikz-alpha-point-regexp (1 myext-auctex-face-tikz-point-face)
+                                               (2 myext-auctex-face-tikz-point-name-face))
+   (,myext-auctex-face-tikzcd-keyword-regexp . myext-auctex-face-tikzcd-keyword-face)))
 
 (provide 'myext-auctex-face)
