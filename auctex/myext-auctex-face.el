@@ -1,4 +1,4 @@
-(require 'myext-auctex-base) ; LaTeX-if-regexp
+(require 'myext-auctex-base) ; myext-auctex-base--if-regexp
 
 (defface myext-auctex-face-begin-document-line-face
   `((t
@@ -142,7 +142,7 @@
                           ;; 設定方法の詳細などは font-lock-keywords の document を参照
                           ("\\(^\\|[^\\]\\)\\(\\\\&\\)" 2 'font-latex-warning-face)
                           ;; ↑font-latex.el からパクってきた (元は \\\\& じゃなくて &+ だった)
-                          (,(concat "\\\\" (eval LaTeX-if-regexp)) . myext-auctex-face-if-face)
+                          (,(concat "\\\\" (eval myext-auctex-base--if-regexp)) . myext-auctex-face-if-face)
                           (,(rx "\\" (or "else" "fi") word-boundary) . myext-auctex-face-if-face)
                           (,(rx (or "\\makeatletter" "\\makeatother") word-boundary) . font-lock-semi-keyword-face)
                           (,my-LaTeX-greek-regexp . myext-auctex-face-greek-face)

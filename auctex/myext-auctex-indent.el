@@ -130,7 +130,7 @@ environments."
             (setq count (- count LaTeX-left-right-indent-level)))
            ((looking-at LaTeX-begin-regexp)
             (setq count (+ count LaTeX-indent-level)))
-           ((looking-at LaTeX-if-regexp)
+           ((looking-at myext-auctex-base--if-regexp)
             (unless (looking-back (rx "\\newif\\"))
               (setq count (+ count LaTeX-indent-level))))
            ((looking-at LaTeX-else-regexp))
