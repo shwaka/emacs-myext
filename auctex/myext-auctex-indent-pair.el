@@ -5,12 +5,12 @@
 (require 'myext-auctex-base)
 ;;; ↑myext-auctex-base--{if,else,end}-regexp
 
-(defvar my-left-keywords-regexp
+(defvar myext-auctex-indent-pair--left-keywords-regexp
   (rx (or "left" "bigl" "biggl") word-boundary))
-(defvar my-right-keywords-regexp
+(defvar myext-auctex-indent-pair--right-keywords-regexp
   (rx (or "right" "bigr" "biggr") word-boundary))
 
-(defun adv:LaTeX-indent-level-count ()
+(defun override:LaTeX-indent-level-count ()
   "Count indentation change caused by all \\left, \\right, \\begin, and
 \\end commands in the current line."
   (save-excursion
@@ -26,9 +26,9 @@
                             (point)))
         (while (search-forward TeX-esc nil t)
           (cond
-           ((looking-at my-left-keywords-regexp)
+           ((looking-at myext-auctex-indent-pair--left-keywords-regexp)
             (setq count (+ count LaTeX-left-right-indent-level)))
-           ((looking-at my-right-keywords-regexp)
+           ((looking-at myext-auctex-indent-pair--right-keywords-regexp)
             (setq count (- count LaTeX-left-right-indent-level)))
            ((looking-at LaTeX-begin-regexp)
             (setq count (+ count LaTeX-indent-level)))
@@ -41,7 +41,7 @@
            ((looking-at (regexp-quote TeX-esc))
             (forward-char 1))))
         count))))
-(advice-add 'LaTeX-indent-level-count :override 'adv:LaTeX-indent-level-count)
+(advice-add 'LaTeX-indent-level-count :override 'override:LaTeX-indent-level-count)
 
 (defun override:LaTeX-indent-calculate-last (&optional force-type)
   "Return the correct indentation of a normal line of text.
@@ -141,7 +141,8 @@ outer indentation in case of a commented line.  The symbols
 					   "\\)"))
 		       LaTeX-indent-level)
 		      ((looking-at
-			(concat (regexp-quote TeX-esc) my-right-keywords-regexp))
+			(concat (regexp-quote TeX-esc)
+                                myext-auctex-indent-pair--right-keywords-regexp))
 		       LaTeX-left-right-indent-level)
 		      ((looking-at (concat (regexp-quote TeX-esc)
 					   "\\("
@@ -203,7 +204,8 @@ outer indentation in case of a commented line.  The symbols
 				 "\\)"))
 	     ;; Backindent at \end.
 	     (- (LaTeX-indent-calculate-last force-type) LaTeX-indent-level))
-	    ((looking-at (concat (regexp-quote TeX-esc) my-right-keywords-regexp))
+	    ((looking-at (concat (regexp-quote TeX-esc)
+                                 myext-auctex-indent-pair--right-keywords-regexp))
 	     ;; Backindent at \right.
 	     (- (LaTeX-indent-calculate-last force-type)
 		LaTeX-left-right-indent-level))
