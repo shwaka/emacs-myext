@@ -58,19 +58,19 @@
   "face")
 
 ;;; colorize greek characters
-(defvar my-LaTeX-greek-lower
+(defvar myext-auctex-face-greek-lower
   '("alpha" "beta" "gamma" "delta" "epsilon" "zeta" "eta" "theta" "iota" "kappa" "lambda" "mu" "nu" "xi" "pi" "rho" "sigma" "tau" "upsilon" "phi" "chi" "psi" "omega"))
-(defvar my-LaTeX-greek-capital
+(defvar myext-auctex-face-greek-capital
   '("Gamma" "Delta" "Theta" "Lambda" "Xi" "Pi" "Sigma" "Upsilon" "Phi" "Psi" "Omega"))
-(defvar my-LaTeX-greek-var
+(defvar myext-auctex-face-greek-var
   '("varepsilon" "vartheta" "varrho" "varphi"))
-(defvar my-LaTeX-greek
-  (append my-LaTeX-greek-lower
-          my-LaTeX-greek-capital
-          my-LaTeX-greek-var))
-(defvar my-LaTeX-greek-regexp
+(defvar myext-auctex-face-greek
+  (append myext-auctex-face-greek-lower
+          myext-auctex-face-greek-capital
+          myext-auctex-face-greek-var))
+(defvar myext-auctex-face-greek-regexp
   (rx "\\"
-      (eval (cons 'or my-LaTeX-greek))
+      (eval (cons 'or myext-auctex-face-greek))
       word-boundary))
 (defface myext-auctex-face-greek-face
   `((t :foreground ,mytheme-keyword-foreground-3 ))
@@ -79,11 +79,11 @@
   "face")
 
 ;;; colorize commands in tikz
-(defvar my-LaTeX-tikz-keyword
+(defvar myext-auctex-face-tikz-keyword
   '("path" "draw" "coordinate"))
-(defvar my-LaTeX-tikz-keyword-regexp
+(defvar myext-auctex-face-tikz-keyword-regexp
   (rx "\\"
-      (eval (cons 'or my-LaTeX-tikz-keyword))
+      (eval (cons 'or myext-auctex-face-tikz-keyword))
       word-boundary))
 (defface myext-auctex-face-tikz-keyword-face
   `((t :foreground ,mytheme-keyword-foreground-4))
@@ -91,16 +91,16 @@
 (defvar myext-auctex-face-tikz-keyword-face 'myext-auctex-face-tikz-keyword-face
   "face")
 ;;; colorize points in tikz
-(defvar my-LaTeX-tikz-point
+(defvar myext-auctex-face-tikz-point
   '("p" "x" "y"))
 ;;; 下の2つの regexp をあわせて (or ...) にすると何故か動かない
-(defvar my-LaTeX-tikz-numeric-point-regexp
+(defvar myext-auctex-face-tikz-numeric-point-regexp
   (rx (group "\\"
-             (eval (cons 'or my-LaTeX-tikz-point)))
+             (eval (cons 'or myext-auctex-face-tikz-point)))
       (group numeric)))
-(defvar my-LaTeX-tikz-alpha-point-regexp
+(defvar myext-auctex-face-tikz-alpha-point-regexp
   (rx (group "\\"
-             (eval (cons 'or my-LaTeX-tikz-point)))
+             (eval (cons 'or myext-auctex-face-tikz-point)))
       "{"
       (group (1+ alphanumeric))
       "}"))
@@ -115,11 +115,11 @@
 (defvar myext-auctex-face-tikz-point-name-face 'myext-auctex-face-tikz-point-name-face
   "face")
 ;;; colorize commands in tikzcd
-(defvar my-LaTeX-tikzcd-keyword
+(defvar myext-auctex-face-tikzcd-keyword
   '("arrow" "ar"))
-(defvar my-LaTeX-tikzcd-keyword-regexp
+(defvar myext-auctex-face-tikzcd-keyword-regexp
   (rx "\\"
-      (eval (cons 'or my-LaTeX-tikzcd-keyword))
+      (eval (cons 'or myext-auctex-face-tikzcd-keyword))
       word-boundary))
 (defface myext-auctex-face-tikzcd-keyword-face
   `((t :foreground ,mytheme-keyword-foreground-4))
@@ -145,12 +145,12 @@
                           (,(concat "\\\\" (eval myext-auctex-base--if-regexp)) . myext-auctex-face-if-face)
                           (,(rx "\\" (or "else" "fi") word-boundary) . myext-auctex-face-if-face)
                           (,(rx (or "\\makeatletter" "\\makeatother") word-boundary) . font-lock-semi-keyword-face)
-                          (,my-LaTeX-greek-regexp . myext-auctex-face-greek-face)
-                          (,my-LaTeX-tikz-keyword-regexp . myext-auctex-face-tikz-keyword-face)
-                          (,my-LaTeX-tikz-numeric-point-regexp (1 myext-auctex-face-tikz-point-face)
-                                                               (2 myext-auctex-face-tikz-point-name-face))
-                          (,my-LaTeX-tikz-alpha-point-regexp (1 myext-auctex-face-tikz-point-face)
-                                                             (2 myext-auctex-face-tikz-point-name-face))
-                          (,my-LaTeX-tikzcd-keyword-regexp . myext-auctex-face-tikzcd-keyword-face)))
+                          (,myext-auctex-face-greek-regexp . myext-auctex-face-greek-face)
+                          (,myext-auctex-face-tikz-keyword-regexp . myext-auctex-face-tikz-keyword-face)
+                          (,myext-auctex-face-tikz-numeric-point-regexp (1 myext-auctex-face-tikz-point-face)
+                                                                        (2 myext-auctex-face-tikz-point-name-face))
+                          (,myext-auctex-face-tikz-alpha-point-regexp (1 myext-auctex-face-tikz-point-face)
+                                                                      (2 myext-auctex-face-tikz-point-name-face))
+                          (,myext-auctex-face-tikzcd-keyword-regexp . myext-auctex-face-tikzcd-keyword-face)))
 
 (provide 'myext-auctex-face)
