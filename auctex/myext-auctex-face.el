@@ -79,8 +79,9 @@
   "face")
 
 ;;; colorize commands in tikz
+;;; ↓myext-auctex-indent-env--tikz-commands と重複してる
 (defvar myext-auctex-face-tikz-keyword
-  '("path" "draw" "coordinate"))
+  '("path" "draw" "coordinate" "clip" "node" "pic"))
 (defvar myext-auctex-face-tikz-keyword-regexp
   (rx "\\"
       (eval (cons 'or myext-auctex-face-tikz-keyword))
