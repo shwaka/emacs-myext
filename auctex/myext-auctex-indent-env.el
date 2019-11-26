@@ -68,7 +68,7 @@ environments."
 ;;; indent in tikzpicture
 ;;; ↓myext-auctex-face-tikz-keyword と重複してる
 (defvar myext-auctex-indent-env--tikz-commands
-  '("path" "draw" "coordinate" "clip" "node" "pic")
+  '("path" "draw" "coordinate" "clip" "node" "pic" "useasboundingbox")
   "commands which begin tikz commands (e.g. \\path, \\draw)")
 (defun myext-auctex-indent-env--goto-previous-nontriv-line ()
   "go to (the beginning of) the previous nontrivial line"
