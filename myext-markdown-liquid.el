@@ -18,7 +18,7 @@
     (3 'font-lock-keyword-face))))
 
 (defvar mdlq-liquid-begin-tag-list
-  '("theorem" "definition" "proposition" "lemma" "corollary" "remark"))
+  '("theorem" "definition" "proposition" "lemma" "corollary" "remark" "proof"))
 
 (defvar mdlq-liquid-end-tag-list
   (mapcar (lambda (name) (concat "end" name))
