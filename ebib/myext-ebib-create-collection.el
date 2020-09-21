@@ -5,7 +5,7 @@ in DATABASES."
   (seq-reduce (lambda (coll db)
                 (let ((file (propertize (ebib-db-get-filename db 'short) 'face 'ebib-display-bibfile-face)))
                   (append (mapcar (lambda (key)
-                                    (propertize (myext-ebib-create-candidate db key file)
+                                    (propertize (funcall myext-ebib-key-display-function db key file)
                                                 'ebib-key key
                                                 'ebib-db db))
                                   (ebib-db-list-keys db))
@@ -20,14 +20,18 @@ in DATABASES."
   (seq-reduce (lambda (coll db)
                 (let ((file (propertize (ebib-db-get-filename db 'short) 'face 'ebib-display-bibfile-face)))
                   (append (mapcar (lambda (key)
-                                    (cons (myext-ebib-create-candidate db key file)
+                                    (cons (funcall myext-ebib-key-display-function db key file)
                                           (list key db)))
                                   (ebib-db-list-keys db))
                           coll)))
               databases nil))
 (advice-add 'ebib--create-collection-helm :override 'override:ebib--create-collection-helm)
 
-(defun myext-ebib-create-candidate (db key file)
+(defvar myext-ebib-key-display-function
+  #'myext-ebib-default-key-display-function
+  "function to create candidate")
+
+(defun myext-ebib-default-key-display-function (db key file)
   (format "%-20s  %s (%s) «%s»"
           file
           (ebib--get-field-value-for-display "Author/Editor" key db 'face 'ebib-display-author-face)
