@@ -27,10 +27,10 @@ If prefix ARG is non-nil, do not delete the original file."
     (copy-file file-path dest-path)
     (unless arg
       (delete-file file-path t))
-    (let ((files (ebib-get-field-value ebib-file-field key ebib--cur-db 'noerror 'unbraced)))
+    (let ((files (ebib-get-field-value "file" key ebib--cur-db 'noerror 'unbraced)))
       (when (or (null files)
                 (not (string-match-p (regexp-quote new-name) files)))
-        (ebib-set-field-value ebib-file-field (ebib--transform-file-name-for-storing (expand-file-name dest-path)) key ebib--cur-db ebib-filename-separator)
+        (ebib-set-field-value "file" (ebib--transform-file-name-for-storing (expand-file-name dest-path)) key ebib--cur-db ebib-filename-separator)
         (ebib--set-modified t ebib--cur-db t (seq-filter (lambda (dependent)
                                                            (ebib-db-has-key key dependent))
                                                          (ebib--list-dependents ebib--cur-db)))
