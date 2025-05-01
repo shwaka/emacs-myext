@@ -35,6 +35,9 @@
              (+ offset indent))
             (t
              (+ contin indent))))))
+(defvar myext-auctex-item-environment
+  '("itemize" "enumerate" "description")
+  "environment names which contain \\item")
 (defun myext-auctex-indent-env--indent-item ()
   "Provide proper indentation for LaTeX \"itemize\",\"enumerate\", and
 \"description\" environments.
@@ -45,8 +48,9 @@
   Continuation lines are indented either twice
   `LaTeX-indent-level', or `myext-auctex-indent-env--indent-level-item-continuation'
   if the latter is bound."
-  (myext-auctex-indent-env--indent-item--inner "\\(itemize\\|\\enumerate\\|description\\)"
-                                               "\\\\item\\>"))
+  (myext-auctex-indent-env--indent-item--inner
+   (rx-to-string `(group (or ,@myext-auctex-item-environment)) t)
+   "\\\\item\\>"))
 (defun myext-auctex-indent-env--indent-bibitem ()
   "Provide proper indentation for LaTeX \"thebibliography\" environment.
 
@@ -102,12 +106,11 @@ environments."
          indent-increase))))
 
 (setq LaTeX-indent-environment-list
-      (nconc '(("itemize" myext-auctex-indent-env--indent-item)
-               ("enumerate" myext-auctex-indent-env--indent-item)
-               ("description" myext-auctex-indent-env--indent-item)
-               ("thebibliography" myext-auctex-indent-env--indent-bibitem)
+      (nconc '(("thebibliography" myext-auctex-indent-env--indent-bibitem)
                ("tikzpicture" myext-auctex-indent-env--indent-tikzpicture)
                ("scope" myext-auctex-indent-env--indent-tikzpicture))
-             LaTeX-indent-environment-list))
+             LaTeX-indent-environment-list
+             (mapcar (lambda (name) (list name 'myext-auctex-indent-env--indent-item))
+                     myext-auctex-item-environment)))
 
 (provide 'myext-auctex-indent-env)
