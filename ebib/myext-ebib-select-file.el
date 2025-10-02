@@ -1,3 +1,4 @@
+;;; 複数の項目が file に書かれているときに番号で指定するのは辛いので，ファイル名で指定できるようにした
 (defun override:ebib--select-file (files n key)
   "Split FILES into separate files and return the Nth.
 FILES should be a string of file names separated by
@@ -10,6 +11,7 @@ the function `ebib--create-file-name-from-key' for details."
   (if (not files)
       (ebib--create-file-name-from-key key "pdf")
     (let ((file-list (ebib--split-files files)))
+      ;; ここから下を丸ごと差し替えた
       (cond
        ((= (length file-list) 1)
         (nth 0 file-list))
@@ -27,6 +29,7 @@ the function `ebib--create-file-name-from-key' for details."
             (error "[Ebib] No such file (%d)" n))
           (nth (1- n) file-list))))
        (t (nth (1- n) file-list)))
+      ;; 以下はオリジナルの実装
       ;; (cond
       ;;  ((= (length file-list) 1)
       ;;   (setq n 1))
