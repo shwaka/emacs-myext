@@ -1,3 +1,7 @@
+(defun myext-ebib--get-dest-dir ()
+  ;; read-directory-name を追加して，import 先を自分で選べるようにした
+  (read-directory-name "Import to: " (car ebib-file-search-dirs) nil t))
+
 (defun override:ebib-import-file (arg)
   "Import a file into the database.
 Ask the user for a file path, rename it and move it to the first
@@ -10,8 +14,7 @@ If prefix ARG is non-nil, do not delete the original file."
          (file-path (expand-file-name (read-file-name "File to import: " ebib-import-directory nil t)))
          (ext (file-name-extension file-path))
          (new-name (ebib--create-file-name-from-key key ext))
-         (dest-dir (file-name-as-directory
-                    (read-directory-name "Import to: " (car ebib-file-search-dirs) nil t)))
+         (dest-dir (file-name-as-directory (myext-ebib--get-dest-dir))) ; 変更点はここだけ
          (dest-path (concat dest-dir new-name))
          (overwrite nil))
     (if (not (file-writable-p dest-path))
