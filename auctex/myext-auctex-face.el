@@ -44,8 +44,16 @@
   `((t
      :background ,mytheme-section-background-2
      ))
-  "Font Lock mode face for \\section{...}.")
+  "Font Lock mode face for \\subsection{...}.")
 (defvar myext-auctex-face-subsection-line-face 'myext-auctex-face-subsection-line-face
+  "face")
+
+(defface myext-auctex-face-subsubsection-line-face
+  `((t
+     :background ,mytheme-section-background-2
+     ))
+  "Font Lock mode face for \\subsubsection{...}.")
+(defvar myext-auctex-face-subsubsection-line-face 'myext-auctex-face-subsubsection-line-face
   "face")
 
 (defface myext-auctex-face-if-face
@@ -138,6 +146,7 @@
    ("\\\\part\\*?{.*}.*\n" . (0 myext-auctex-face-part-line-face t))
    ("\\\\section\\*?{.*}.*\n" . (0 myext-auctex-face-section-line-face t))
    ("\\\\subsection\\*?{.*}.*" . (0 myext-auctex-face-subsection-line-face t))
+   ("\\\\subsubsection\\*?{.*}.*" . (0 myext-auctex-face-subsubsection-line-face t))
    ;; \section{hoge $a=b$} のような場合にも face をつけるために，OVERRIDE を t にした
    ;; $...$ は "syntax highlighting" なので優先度が高いらしい？
    ;;   https://emacs.stackexchange.com/questions/19182/how-to-highlight-specific-keywords-inside-strings-quotes/19191
