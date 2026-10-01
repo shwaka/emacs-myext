@@ -12,4 +12,9 @@
   "\\else をインデントするために追加した変数")
 (setq LaTeX-end-regexp (rx (or "end" "else" "fi") word-boundary)) ; これだけは元々auctexに存在
 
+
+(defvar myext-auctex--tikz-commands
+  '("path" "draw" "coordinate" "clip" "node" "pic" "useasboundingbox" "fill")
+  "`myext-auctex-face-tikz-keyword' と `myext-auctex-indent-env--tikz-commands' で利用する")
+
 (provide 'myext-auctex-base)
